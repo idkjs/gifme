@@ -1,9 +1,10 @@
-external setSrcObject : Dom.element => Navigator.mediaStream => unit = "srcObject" [@@bs.set];
+// open WebApi;
+[@bs.set] external setSrcObject : (Dom.element, Navigator.mediaStream) => unit = "srcObject";
 
-external setSrcObjectString : Dom.element => string => unit = "srcObject" [@@bs.set];
+[@bs.set] external setSrcObjectString : (Dom.element, string) => unit = "srcObject";
 
-external onLoaded : Dom.element => (unit => unit) => unit = "onloadedmetadata" [@@bs.set];
+[@bs.set] external onLoaded : (Dom.element, unit => unit) => unit = "onloadedmetadata";
 
-external play : Dom.element => unit = "play" [@@bs.send];
+[@bs.send] external play : Dom.element => unit = "play";
 
-external pause : Dom.element => unit = "pause" [@@bs.send];
+[@bs.send] external pause : Dom.element => unit = "pause";

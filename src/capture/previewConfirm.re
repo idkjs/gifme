@@ -1,19 +1,17 @@
-external createObjectURL : Blob.t => string = "URL.createObjectURL" [@@bs.val];
+[@bs.val] external createObjectURL : 'a => string = "URL.createObjectURL";
 
-let component = ReasonReact.statelessComponent "LoopVideo";
+[@react.component]
+let make =(~chunk, ~onComplete, ~onCancel) => {
+    let url = createObjectURL(chunk);
 
-let make ::chunk ::onComplete ::onCancel _children => {
-  ...component,
-  render: fun _self => {
-    let url = createObjectURL chunk;
     <div className="capture__doneRecording">
-      <video autoPlay=Js.true_ loop=Js.true_ src=url />
+      <video autoPlay=true loop=true src=url />
       <div className="confirmBox">
-        <button onClick=(fun _ => onCancel ())> (ReasonReact.stringToElement {js|⟲|js}) </button>
-        <button onClick=(fun _ => onComplete chunk)>
-          (ReasonReact.stringToElement {js|✔|js})
+        <button onClick={ _ => onCancel ()}> {React.string({js|⟲|js})} </button>
+        <button onClick={_ => onComplete (chunk)}>
+          {React.string ({js|✔|js})}
         </button>
       </div>
     </div>
-  }
+
 };

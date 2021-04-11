@@ -1,13 +1,13 @@
 type t;
 
-external readAsArrayBuffer : t => Blob.t => unit = "readAsArrayBuffer" [@@bs.send];
+[@bs.send] external readAsArrayBuffer : (t, Blob.t) => unit = "readAsArrayBuffer";
 
-external readAsBinaryString : t => Blob.t => unit = "readAsBinaryString" [@@bs.send];
+[@bs.send] external readAsBinaryString : (t, Blob.t) => unit = "readAsBinaryString";
 
-external onload : t => (unit => unit) => unit = "onload" [@@bs.set];
+[@bs.set] external onload : (t, unit => unit) => unit = "onload";
 
-external result : t => Js.Typed_array.array_buffer = "result" [@@bs.get];
+[@bs.get] external result : t => Js.Typed_array.array_buffer = "result";
 
-external resultAsString : t => string = "result" [@@bs.get];
+[@bs.get] external resultAsString : t => string = "result";
 
-external create : unit => t = "FileReader" [@@bs.new];
+[@bs.new] external create : unit => t = "FileReader";

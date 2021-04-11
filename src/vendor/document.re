@@ -1,21 +1,22 @@
+// open Webapi;
 let window: Dom.element = [%bs.raw "window"];
 
-external createElement : string => Dom.element = "document.createElement" [@@bs.val];
+[@bs.val] external createElement : string => Dom.element = "document.createElement";
 
-external appendChild : Dom.element => Dom.element = "document.body.appendChild" [@@bs.val];
+[@bs.val] external appendChild : Dom.element => Dom.element = "document.body.appendChild";
 
-external addEventListener : Dom.element => string => (unit => unit) => unit =
-  "addEventListener" [@@bs.send];
+[@bs.send]
+external addEventListener : (Dom.element, string, unit => unit) => unit = "addEventListener";
 
-external removeEventListener : Dom.element => string => (unit => unit) => unit =
-  "removeEventListener" [@@bs.send];
+[@bs.send]
+external removeEventListener : (Dom.element, string, unit => unit) => unit = "removeEventListener";
 
-external getWidth : Dom.element => int = "innerWidth" [@@bs.get];
+[@bs.get] external getWidth : Dom.element => int = "innerWidth";
 
-external getHeight : Dom.element => int = "innerHeight" [@@bs.get];
+[@bs.get] external getHeight : Dom.element => int = "innerHeight";
 
-external setWidth : Dom.element => int => unit = "width" [@@bs.set];
+[@bs.set] external setWidth : (Dom.element, int) => unit = "width";
 
-external setHeight : Dom.element => int => unit = "height" [@@bs.set];
+[@bs.set] external setHeight : (Dom.element, int) => unit = "height";
 
-external requestAnimationFrame : (unit => unit) => unit = "requestAnimationFrame" [@@bs.val];
+[@bs.val] external requestAnimationFrame : (unit => unit) => unit = "requestAnimationFrame";

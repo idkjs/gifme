@@ -1,8 +1,8 @@
-external get_time : unit => int = "Date.now" [@@bs.val];
+[@bs.val] external get_time : unit => int = "Date.now";
 
-let rootDir = Node_process.cwd ();
+let rootDir = Node_process.cwd();
 
-let storeDir = Node_path.join [|rootDir, "stored-videos"|];
+let storeDir = Node_path.join([|rootDir, "stored-videos"|]);
 
-let filename () =>
-  Node_path.join [|rootDir, "stored-videos", string_of_int (get_time ())|] ^ ".webm";
+let filename = () =>
+  Node_path.join([|rootDir, "stored-videos", string_of_int(get_time())|]) ++ ".webm";

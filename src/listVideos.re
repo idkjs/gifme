@@ -1,67 +1,65 @@
 module VideoItem = {
   type state = {
-    videoRef: ref (option Dom.element),
+    videoRef: ref(option(Dom.element)),
     isPlaying: bool
   };
   type actions =
     | Play
     | Stop;
-  let setSectionRef theRef {ReasonReact.state: state} => state.videoRef := Js.Null.to_opt theRef;
-  let component = ReasonReact.reducerComponent "VideoItem";
-  let playVideo video _ =>
-    switch !video {
+ let playVideo = (video, _) =>
+    switch video^ {
     | None => ()
-    | Some r => Video.play r
+    | Some((r)) => Video.play(r)
     };
-  let stopVideo video _ =>
-    switch !video {
+  let stopVideo = (video, _) =>
+    switch video^ {
     | None => ()
-    | Some r => Video.pause r
+    | Some((r)) => Video.pause(r)
     };
-  let make ::video ::onVideoSelect _children => {
-    ...component,
-    initialState: fun () => {videoRef: ref None, isPlaying: false},
-    reducer: fun action state =>
+
+    let initialState = {videoRef: ref(None), isPlaying: false};
+    [@react.component]
+  let make = (~video, ~onVideoSelect) => {
+let (state,dispatch)= React.useReducer((state, action) =>
       switch action {
       | Play =>
-        ReasonReact.UpdateWithSideEffects {...state, isPlaying: true} (playVideo state.videoRef)
+      playVideo(state.videoRef)|>ignore;
+        {...state, isPlaying: true}
       | Stop =>
-        ReasonReact.UpdateWithSideEffects {...state, isPlaying: false} (stopVideo state.videoRef)
-      },
-    didMount: fun self => {
-      switch !self.state.videoRef {
+       stopVideo(state.videoRef)|>ignore;
+     {...state, isPlaying: false}
+      },initialState) ;
+
+  let setSectionRef = ref(Js.Nullable.null);
+
+    React.useEffect0(()=>{
+       switch state.videoRef^ {
       | None => ()
-      | Some r =>
-        Document.addEventListener r "mouseover" (self.reduce (fun _ => Play));
-        Document.addEventListener r "mouseout" (self.reduce (fun _ => Stop))
+      | Some((r)) =>
+        Document.addEventListener(r, "mouseover", dispatch(Play))|>ignore;
+        Document.addEventListener(r, "mouseout", dispatch(Stop))|>ignore;
       };
-      ReasonReact.NoUpdate
-    },
-    render: fun self => {
-      let onClick _ => onVideoSelect video;
+   None
+    });
+
+      let onClick = (_) => onVideoSelect(video);
       <div className="videoItem" onClick>
         <video
-          ref=(self.handle setSectionRef)
-          loop=Js.true_
+          ref={setSectionRef}
+          loop=true
           className="videoItem__video"
           src=video
         />
-      </div>
-      /* <button className="videoItem__button" onClick>
-           (ReasonReact.stringToElement "Select")
-         </button> */
+      </div>;
     }
-  };
 };
 
-let component = ReasonReact.statelessComponent "VideList";
+[@react.component]
+let make = (~videos, ~onVideoSelect) => {
 
-let make ::videos ::onVideoSelect _children => {
-  ...component,
-  render: fun _self =>
     <div className="videoList">
-      (
-        videos |> Array.map (fun video => <VideoItem onVideoSelect video key=video />) |> ReasonReact.arrayToElement
-      )
+{videos
+        |> Array.map((video) => <VideoItem onVideoSelect video key=video />)
+        |> React.array}
     </div>
 };

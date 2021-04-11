@@ -1,9 +1,13 @@
-type t = Js.t {. size : int, type_ : string};
+type t = {
+  .
+  "size": int,
+  "type_": string
+};
 
 type inputType =
-  | Array (Js.Array.t string)
-  | Blob t;
+  | Array(Js.Array.t(string))
+  | Blob(t);
 
-type data = Js.t {. data : string};
+type data = {. "data": string};
 
-external blob : inputType => t = "Blob" [@@bs.new];
+[@bs.new] external blob : inputType => t = "Blob";

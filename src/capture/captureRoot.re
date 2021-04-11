@@ -1,1 +1,1 @@
-ReactDOMRe.renderToElementWithId <Capture /> "index";
+ReactDOMRe.renderToElementWithId(<Capture />, "index");
